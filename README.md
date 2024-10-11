@@ -24,3 +24,6 @@ If you use `pip` to install packages, add them to `environment.yaml` under `pip`
 
 **YOU SHOULD NOT INSTALL NEW PACKAGES DIRECTLY THROUGH `conda`, `mamba`, or `pip`.**
 
+## Environment Variables File
+
+Create a `.env` file based on `.env.example` and put your Hugging Face token in it.
