@@ -15,6 +15,7 @@ dependencies:
   - transformers
   - datasets
   # for jupyter notebook
+  - jupyter
   - ipykernel
   - ipywidgets
   - widgetsnbextension
