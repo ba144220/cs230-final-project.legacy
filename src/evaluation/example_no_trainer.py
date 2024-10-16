@@ -110,7 +110,11 @@ def main():
     model_args, dataset_args, generation_args = parse_args()
 
     print("Loading model...")
-    model = AutoModelForCausalLM.from_pretrained(model_args.model_name_or_path, device_map="auto")
+    if torch.cuda.is_available():   
+        model = AutoModelForCausalLM.from_pretrained(model_args.model_name_or_path, device_map="auto")
+    else:
+        model = AutoModelForCausalLM.from_pretrained(model_args.model_name_or_path)
+   
     tokenizer = AutoTokenizer.from_pretrained(model_args.model_name_or_path, padding_side="left")
     tokenizer.pad_token = tokenizer.eos_token
 
