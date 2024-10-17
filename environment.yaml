@@ -15,7 +15,8 @@ dependencies:
   - pytorch 
   - transformers
   - datasets
-  # for jupyter notebook
+  - scikit-learn  
+# for jupyter notebook
   - jupyter
   - ipykernel
   - ipywidgets

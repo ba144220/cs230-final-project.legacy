@@ -1,0 +1,13 @@
+question,answer,context,id,task,direction,size
+What is the minimum of Col 2?,1,tables/arithmetic_10.html,nt-13,arithmetic,col,"(10, 10)"
+What is the sum of Col 3?,8,tables/arithmetic_4.html,nt-29,arithmetic,col,"(4, 4)"
+List all items in Col 4,"V,F,K,Q,O,F,D,X",tables/item_8.csv,nt-33,item,col,"(8, 8)"
+What is the minimum of Row 9?,2,tables/arithmetic_10.tsv,nt-0,arithmetic,row,"(10, 10)"
+What is the maximum of Col 1?,8,tables/arithmetic_8.html,nt-25,arithmetic,col,"(8, 8)"
+List all items in Col 7,"B,Z,Y,B,O,P,F,C,V,O,C,W",tables/item_12.csv,nt-15,item,col,"(12, 12)"
+What is the sum of Row 2?,40,tables/arithmetic_8.tsv,nt-2,arithmetic,row,"(8, 8)"
+List all items in Row 5,"O,Q,N,T,L,Z",tables/item_6.tsv,nt-42,item,row,"(6, 6)"
+What is the minimum of Row 1?,6,tables/arithmetic_4.tsv,nt-54,arithmetic,row,"(4, 4)"
+What is the sum of Row 6?,52,tables/arithmetic_10.csv,nt-52,arithmetic,row,"(10, 10)"
+List all items in Row 9,"Y,T,N,R,M,G,D,J,U,R",tables/item_10.csv,nt-10,item,row,"(10, 10)"
+What is the sum of Row 9?,52,tables/arithmetic_12.tsv,nt-8,arithmetic,row,"(12, 12)"

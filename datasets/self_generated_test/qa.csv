@@ -1,0 +1,6 @@
+question,answer,context,id,task,direction,size
+What is the maximum of Row 6?,4,tables/arithmetic_6.csv,nt-6,arithmetic,row,"(6, 6)"
+What is the sum of Col 9?,67,tables/arithmetic_12.tsv,nt-9,arithmetic,col,"(12, 12)"
+What is the maximum of Row 1?,10,tables/arithmetic_10.html,nt-12,arithmetic,row,"(10, 10)"
+List all items in Row 1,"R,L,Q,B",tables/item_4.html,nt-34,item,row,"(4, 4)"
+What is the maximum of Row 4?,10,tables/arithmetic_8.csv,nt-56,arithmetic,row,"(8, 8)"
