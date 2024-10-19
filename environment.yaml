@@ -10,11 +10,14 @@ dependencies:
   - pandas
   - numpy
   - matplotlib
+  - lxml
   # for model
   - pytorch 
   - transformers
   - datasets
-  # for jupyter notebook
+  - accelerate
+# for jupyter notebook
+  - jupyter
   - ipykernel
   - ipywidgets
   - widgetsnbextension
