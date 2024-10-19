@@ -15,6 +15,7 @@ dependencies:
   - pytorch 
   - transformers
   - datasets
+  - accelerate
 # for jupyter notebook
   - jupyter
   - ipykernel
