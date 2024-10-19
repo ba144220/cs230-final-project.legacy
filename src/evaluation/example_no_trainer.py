@@ -8,7 +8,7 @@ from dataclasses import dataclass, field
 from typing import List
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig, HfArgumentParser
 from tqdm import tqdm
-from dataset_reader import DatasetReader
+from data.dataset_reader import DatasetReader
 
 @dataclass
 class ModelArguments:
