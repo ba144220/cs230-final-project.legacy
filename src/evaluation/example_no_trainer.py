@@ -130,41 +130,40 @@ def main():
 
     dataset_reader = DatasetReader(dataset_args.dataset_name, dataset_args.dataset_split_type, dataset_args.table_ext)
     dataset = dataset_reader.read_file_as_prompt()
-    print(dataset[:3])
     print("Preprocessing data...")
     batches = data_preprocessing(dataset, tokenizer, generation_args.batch_size)
     
-    # inference_results = []
+    inference_results = []
 
-    # # Run inference
-    # print("Running inference...")
-    # with torch.no_grad():
-    #     for batch in tqdm(batches):
-    #         # Move the batch to the model's device
-    #         batch = batch.to(model.device)
-    #         outputs = model.generate(
-    #             **batch, 
-    #             max_new_tokens=generation_args.max_new_tokens,
-    #             temperature=generation_args.temperature,
-    #             pad_token_id=tokenizer.eos_token_id
-    #         )
+    # Run inference
+    print("Running inference...")
+    with torch.no_grad():
+        for batch in tqdm(batches):
+            # Move the batch to the model's device
+            batch = batch.to(model.device)
+            outputs = model.generate(
+                **batch, 
+                max_new_tokens=generation_args.max_new_tokens,
+                temperature=generation_args.temperature,
+                pad_token_id=tokenizer.eos_token_id
+            )
             
-    #         # Get only the output tokens
-    #         batch_length = batch.input_ids.shape[1]
-    #         output_ids = outputs[:, batch_length:]
-    #         inference_results.extend(tokenizer.batch_decode(output_ids, skip_special_tokens=True))
+            # Get only the output tokens
+            batch_length = batch.input_ids.shape[1]
+            output_ids = outputs[:, batch_length:]
+            inference_results.extend(tokenizer.batch_decode(output_ids, skip_special_tokens=True))
     
-    # # Evaluate the results
-    # print("Evaluating results...")
-    # correct_count = 0
-    # for i, result in enumerate(inference_results):
-    #     print(f"Result {i+1}: {result}")
-    #     print(f"Expected: {dataset[i]['answer']}")
-    #     if result == dataset[i]['answer']:
-    #         correct_count += 1
-    #     print()
-    # print("-" * 100)
-    # print(f"Accuracy: {correct_count / len(inference_results) * 100:.2f}%")
+    # Evaluate the results
+    print("Evaluating results...")
+    correct_count = 0
+    for i, result in enumerate(inference_results):
+        print(f"Result {i+1}: {result}")
+        print(f"Expected: {dataset[i]['answer']}")
+        if result == dataset[i]['answer']:
+            correct_count += 1
+        print()
+    print("-" * 100)
+    print(f"Accuracy: {correct_count / len(inference_results) * 100:.2f}%")
 
 if __name__ == "__main__":
     main()
