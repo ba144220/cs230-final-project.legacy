@@ -15,12 +15,14 @@ dependencies:
   - pytorch 
   - transformers
   - datasets
-# for jupyter notebook
+  # for jupyter notebook
   - jupyter
   - ipykernel
   - ipywidgets
   - widgetsnbextension
   - pandas-profiling
+  # for data generation
+  - bs4
   - pip
   # put your pip packages here
   - pip:
