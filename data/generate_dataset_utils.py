@@ -74,9 +74,9 @@ def save_table(df: pd.DataFrame, file_type: FileTypeEnum, file_path: str, file_n
     if not os.path.exists(file_path):
         os.makedirs(file_path)
     if file_type == FileTypeEnum.TSV:
-        df.to_csv(os.path.join(file_path, file_name + '.tsv'), sep='\t', index=False)
+        df.to_csv(os.path.join(file_path, file_name + '.tsv'), sep='\t', index=True)
     elif file_type == FileTypeEnum.CSV:
-        df.to_csv(os.path.join(file_path, file_name + '.csv'), index=False)
+        df.to_csv(os.path.join(file_path, file_name + '.csv'), index=True)
     elif file_type == FileTypeEnum.HTML:
-        df.to_html(os.path.join(file_path, file_name + '.html') , index=False)
+        df.to_html(os.path.join(file_path, file_name + '.html') , index=True)
 

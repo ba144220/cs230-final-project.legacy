@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import os
 
-from data.generate_dataset import generate_table, generate_qa, save_table
+from data.generate_dataset_utils import generate_table, generate_qa, save_table
 from data.data_types import TaskEnum, FileTypeEnum
 from typing import List
 from tqdm import tqdm
@@ -24,23 +24,27 @@ def main():
     
     for split in ["train", "val", "test"]:
         all_qa_df = pd.DataFrame()
-        for table_idx in tqdm(range(split_sizes[split] // (8*2*len(sizes)))):
+        table_idx = 0
+        for _ in tqdm(range(split_sizes[split] // (8*2*len(sizes)))):
             for size in sizes:
                 for task in TaskEnum:
                     # Randomly select a task
                     df = generate_table(task, size, size)
                     table_path = os.path.join("./datasets/self_generated", "csv", split)
-                    save_table(df, FileTypeEnum.CSV, table_path, f"{table_idx}_{task.value}_{size}")
-                    save_table(df, FileTypeEnum.TSV, table_path, f"{table_idx}_{task.value}_{size}")
-                    save_table(df, FileTypeEnum.HTML, table_path, f"{table_idx}_{task.value}_{size}")
+                    table_name = f"{table_idx}-{task.value}-{size}"
+                    save_table(df, FileTypeEnum.CSV, table_path, table_name)
+                    save_table(df, FileTypeEnum.TSV, table_path, table_name)
+                    save_table(df, FileTypeEnum.HTML, table_path, table_name)
                     
-                    table_path = f"csv/{split}/{table_idx}-{task.value}-{size}.csv"
+                    table_path = f"csv/{split}/{table_name}.csv"
                     qa_df = generate_qa(task, df)
                     # Set all "context" to the table path
                     qa_df["context"] = table_path
                     qa_df["task"] = task.value
                     qa_df["size"] = str(int(size))
                     all_qa_df = pd.concat([all_qa_df, qa_df])
+                    
+                    table_idx += 1
             
         # Assign id="{split}-<row_number>" to each row
         all_qa_df["id"] = [f"{split}-{i}" for i in range(len(all_qa_df))]
