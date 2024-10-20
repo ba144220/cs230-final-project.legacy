@@ -9,7 +9,7 @@ from typing import List
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig, HfArgumentParser
 from tqdm import tqdm
 from data.dataset_reader import DatasetReader
-
+from data.data_types import DatasetSplitTypeEnum, FileTypeEnum
 @dataclass
 class ModelArguments:
     """
@@ -46,11 +46,11 @@ class DatasetArguments:
     dataset_name: str = field(
         metadata={"help": "Name of the dataset to evaluate on"}
     )
-    dataset_split_type: str = field(
+    dataset_split_type: DatasetSplitTypeEnum = field(
         metadata={"help": "Type of the dataset split to evaluate on"}
     )
-    table_ext: str = field(
-        default=".csv",
+    table_ext: FileTypeEnum = field(
+        default=FileTypeEnum.CSV,
         metadata={"help": "Extension of the table file"}
     )
 
@@ -96,19 +96,15 @@ def load_dummy_dataset(dataset_args: DatasetArguments):
     ] * 5
     return dummy_dataset
 
-def data_preprocessing(dataset: List[dict], tokenizer: AutoTokenizer, batch_size: int = 4):
+def data_preprocessing(dataset_strings: List[str], tokenizer: AutoTokenizer, batch_size: int = 4):
     """
     Preprocess the dataset.
     """
-    dataset_input_strings = []
     batches = []
-    for data in dataset:
-        input_string = tokenizer.apply_chat_template(data["messages"], tokenize=False, add_generation_prompt=True)
-        dataset_input_strings.append(input_string)
-        
+
     # Batch encode the dataset
-    for i in range(0, len(dataset_input_strings), batch_size):
-        batch = dataset_input_strings[i:i+batch_size]
+    for i in range(0, len(dataset_strings), batch_size):
+        batch = dataset_strings[i:i+batch_size]
         batches.append(tokenizer(batch, padding=True, truncation=True, return_tensors="pt"))
     
     return batches
@@ -128,10 +124,16 @@ def main():
     tokenizer.pad_token = tokenizer.eos_token
 
 
-    dataset_reader = DatasetReader(dataset_args.dataset_name, dataset_args.dataset_split_type, dataset_args.table_ext)
-    dataset = dataset_reader.read_file_as_prompt()
+    dataset_reader = DatasetReader(
+        dataset_args.dataset_name, 
+        dataset_args.dataset_split_type, 
+        dataset_args.table_ext, 
+        tokenizer,
+        system_prompt="You will be given a question and a table. Please answer the question based on the information in the table. You can do some reasoning, but put your final answer in the last line starting with 'Answer: '"
+    )
+    dataset_strings = dataset_reader.apply_chat_template()
     print("Preprocessing data...")
-    batches = data_preprocessing(dataset, tokenizer, generation_args.batch_size)
+    batches = data_preprocessing(dataset_strings, tokenizer, generation_args.batch_size)
     
     inference_results = []
 
@@ -151,7 +153,12 @@ def main():
             # Get only the output tokens
             batch_length = batch.input_ids.shape[1]
             output_ids = outputs[:, batch_length:]
-            inference_results.extend(tokenizer.batch_decode(output_ids, skip_special_tokens=True))
+            output_strings = tokenizer.batch_decode(output_ids, skip_special_tokens=True)
+            
+            print("-" * 100)
+            print(output_strings[0])
+        
+            inference_results.extend(output_strings)
     
     # Evaluate the results
     print("Evaluating results...")

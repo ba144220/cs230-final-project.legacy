@@ -14,6 +14,11 @@ class FileTypeEnum(Enum):
     CSV = "csv"
     HTML = "html"
     TSV = "tsv"
+    
+class DatasetSplitTypeEnum(Enum):
+    TRAIN = "train"
+    VAL = "val"
+    TEST = "test"
 
 @dataclass
 class DatasetOutput:
